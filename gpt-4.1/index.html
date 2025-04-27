@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flashcards App</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Flashcards App</h1>
+    <button id="toggle-mode" aria-label="Toggle light/dark mode">🌙</button>
+  </header>
+  <main id="app" role="main">
+    <section id="deck-library" aria-label="Deck Library">
+      <h2>Your Decks</h2>
+      <input type="file" id="csv-upload" accept=".csv" aria-label="Upload CSV Deck">
+      <button id="download-template" aria-label="Download Sample CSV">Download Sample CSV</button>
+      <ul id="deck-list" tabindex="0"></ul>
+    </section>
+    <section id="study-config" aria-label="Study Configuration" hidden>
+      <h2>Study Settings</h2>
+      <form id="study-options">
+        <label>Order:
+          <select id="order-mode">
+            <option value="sequential">Sequential</option>
+            <option value="random">Random</option>
+          </select>
+        </label>
+        <label>Number of Cards:
+          <input type="number" id="num-cards" min="1" value="10">
+        </label>
+        <label>Time per Card (sec):
+          <input type="number" id="time-limit" min="0" value="0">
+        </label>
+        <label>Category:
+          <select id="category-select">
+            <option value="">All</option>
+          </select>
+        </label>
+        <button type="submit">Start Studying</button>
+        <button type="button" id="back-to-library">Back</button>
+      </form>
+    </section>
+    <section id="study-interface" aria-label="Study Interface" hidden>
+      <div id="progress"></div>
+      <div id="card-container" tabindex="0" aria-live="polite">
+        <div id="flashcard" class="card" aria-label="Flashcard" tabindex="0">
+          <div class="card-face card-front"></div>
+          <div class="card-face card-back"></div>
+        </div>
+        <img id="card-image" alt="" hidden>
+      </div>
+      <div id="card-controls">
+        <button id="prev-card" aria-label="Previous Card">⏮️</button>
+        <button id="flip-card" aria-label="Flip Card">🔄</button>
+        <button id="next-card" aria-label="Next Card">⏭️</button>
+        <button id="autoplay" aria-label="Autoplay">▶️</button>
+      </div>
+      <div id="mark-controls">
+        <button id="mark-easy" aria-label="Mark Easy">😊</button>
+        <button id="mark-difficult" aria-label="Mark Difficult">😟</button>
+        <button id="mark-correct" aria-label="Mark Correct">✔️</button>
+        <button id="mark-incorrect" aria-label="Mark Incorrect">❌</button>
+        <button id="show-hint" aria-label="Show Hint">💡</button>
+      </div>
+      <button id="exit-study" aria-label="Exit Study">Exit</button>
+    </section>
+    <section id="merge-decks" aria-label="Merge Decks" hidden>
+      <h2>Merge Decks</h2>
+      <form id="merge-form">
+        <label>Select Decks to Merge:</label>
+        <div id="merge-options"></div>
+        <button type="submit">Merge</button>
+        <button type="button" id="cancel-merge">Cancel</button>
+      </form>
+    </section>
+    <div id="error-message" role="alert" hidden></div>
+  </main>
+  <footer>
+    <small>&copy; 2024 Flashcards App</small>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html> 

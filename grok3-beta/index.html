@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for card flipping animation */
+        .card-flip {
+            perspective: 1000px;
+        }
+        .card-inner {
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        .flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+    <div id="app" class="container mx-auto p-4 md:p-6 lg:p-8">
+        <!-- Header with mode toggle -->
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Flashcard App</h1>
+            <button id="themeToggle" class="p-2 rounded-md bg-gray-200 dark:bg-gray-700" aria-label="Toggle dark mode">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </header>
+
+        <!-- Main content area -->
+        <main id="mainContent" class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <!-- Deck Management Section -->
+            <section id="deckManagement" class="mb-6">
+                <h2 class="text-xl font-semibold mb-4">Deck Library</h2>
+                <div class="mb-4">
+                    <label for="csvUpload" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload CSV Deck</label>
+                    <input type="file" id="csvUpload" accept=".csv" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700">
+                </div>
+                <div id="deckList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+                <div class="mt-4">
+                    <a href="template.csv" download class="text-blue-600 dark:text-blue-400 hover:underline">Download CSV Template</a>
+                </div>
+            </section>
+
+            <!-- Study Configuration Section (Hidden by default) -->
+            <section id="studyConfig" class="hidden mb-6">
+                <h2 class="text-xl font-semibold mb-4">Study Configuration</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="orderToggle" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Card Order</label>
+                        <select id="orderToggle" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700">
+                            <option value="sequential">Sequential</option>
+                            <option value="random">Random</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="cardCount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Number of Cards</label>
+                        <input type="number" id="cardCount" min="1" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700" placeholder="All">
+                    </div>
+                    <div>
+                        <label for="timeLimit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Time Limit per Card (seconds)</label>
+                        <input type="number" id="timeLimit" min="0" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700" placeholder="None">
+                    </div>
+                    <div>
+                        <label for="categorySelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
+                        <select id="categorySelect" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700">
+                            <option value="">All Categories</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="startStudy" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Start Studying</button>
+                <button id="mergeDecks" class="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">Merge Decks</button>
+            </section>
+
+            <!-- Study Interface Section (Hidden by default) -->
+            <section id="studyInterface" class="hidden">
+                <div class="mb-4 flex justify-between items-center">
+                    <div class="text-lg font-medium">Progress: <span id="progress">0/0</span></div>
+                    <div id="timer" class="text-lg font-medium hidden">Time: <span id="timeLeft">0</span>s</div>
+                    <button id="backToConfig" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">Back to Config</button>
+                </div>
+                <div id="cardContainer" class="card-flip w-full max-w-md mx-auto h-96 mb-6">
+                    <div class="card-inner w-full h-full relative">
+                        <div class="card-front absolute w-full h-full bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md p-6 flex flex-col justify-between overflow-auto">
+                            <div id="question" class="text-xl font-semibold mb-4 text-gray-900 dark:text-white"></div>
+                            <div id="questionImage" class="hidden w-full max-h-48 object-contain mb-4"></div>
+                            <button id="flipCard" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Show Answer</button>
+                        </div>
+                        <div class="card-back absolute w-full h-full bg-gray-200 dark:bg-gray-700 rounded-lg shadow-md p-6 flex flex-col justify-between overflow-auto">
+                            <div id="answer" class="text-xl font-semibold mb-4 text-gray-900 dark:text-white"></div>
+                            <div id="answerImage" class="hidden w-full max-h-48 object-contain mb-4"></div>
+                            <div class="flex justify-between">
+                                <button id="markCorrect" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">Correct</button>
+                                <button id="markIncorrect" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">Incorrect</button>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <button id="markEasy" class="px-4 py-2 bg-blue-400 text-white rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-300">Easy</button>
+                                <button id="markDifficult" class="px-4 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300">Difficult</button>
+                            </div>
+                            <button id="showHint" class="mt-2 px-4 py-2 bg-yellow-400 text-white rounded-md hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-300">Show Hint</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-between max-w-md mx-auto">
+                    <button id="prevCard" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">Previous</button>
+                    <button id="autoPlay" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">Auto Play</button>
+                    <button id="nextCard" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500">Next</button>
+                </div>
+                <div class="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">Keyboard: Space - Flip, Left - Previous, Right - Next, C - Correct, I - Incorrect, E - Easy, D - Difficult, H - Hint</div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 

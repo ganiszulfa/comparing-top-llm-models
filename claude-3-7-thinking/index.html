@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashCards</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>FlashCards</h1>
+            <div class="theme-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider round"></span>
+                </label>
+                <span id="themeLabel">Dark Mode</span>
+            </div>
+        </header>
+
+        <main>
+            <div id="deckLibrary" class="section active">
+                <h2>My Decks</h2>
+                <div class="deck-controls">
+                    <label for="csvFileInput" class="button primary">
+                        Import Deck
+                        <input type="file" id="csvFileInput" accept=".csv" hidden>
+                    </label>
+                    <button id="downloadTemplateBtn" class="button secondary">Download Template</button>
+                </div>
+                <div id="deckList" class="deck-list">
+                    <div class="empty-state">
+                        <p>No decks yet! Import a CSV file to get started.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="deckConfig" class="section hidden">
+                <button class="back-button" id="backToLibrary">&larr; Back to Library</button>
+                <h2 id="deckConfigTitle">Configure Study Session</h2>
+                <form id="studyConfigForm">
+                    <div class="form-group">
+                        <label for="cardOrder">Card Order:</label>
+                        <select id="cardOrder" name="cardOrder">
+                            <option value="sequential">Sequential</option>
+                            <option value="random">Random</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardLimit">Number of Cards:</label>
+                        <select id="cardLimit" name="cardLimit">
+                            <option value="all">All Cards</option>
+                            <option value="10">10 Cards</option>
+                            <option value="20">20 Cards</option>
+                            <option value="30">30 Cards</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <input type="number" id="customCardLimit" min="1" class="hidden" placeholder="Enter number">
+                    </div>
+                    <div class="form-group">
+                        <label for="timeLimit">Time per Card (seconds):</label>
+                        <input type="number" id="timeLimit" min="0" placeholder="No limit">
+                    </div>
+                    <div class="form-group" id="categorySelectGroup">
+                        <label for="categorySelect">Category:</label>
+                        <select id="categorySelect" name="categorySelect">
+                            <option value="all">All Categories</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Difficulty:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="difficulty" value="all" checked> All</label>
+                            <label><input type="checkbox" name="difficulty" value="difficult"> Difficult</label>
+                            <label><input type="checkbox" name="difficulty" value="easy"> Easy</label>
+                            <label><input type="checkbox" name="difficulty" value="unrated"> Unrated</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="button primary">Start Studying</button>
+                </form>
+            </div>
+
+            <div id="studyMode" class="section hidden">
+                <div class="study-header">
+                    <button class="back-button" id="backToConfig">&larr; Back to Config</button>
+                    <div class="progress-container">
+                        <div id="progressText">Card 1 of 20</div>
+                        <div class="progress-bar">
+                            <div id="progressFill"></div>
+                        </div>
+                    </div>
+                    <div id="timer" class="hidden">00:00</div>
+                </div>
+
+                <div class="flashcard-container">
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">
+                                <div class="card-content">
+                                    <p id="questionText"></p>
+                                    <div id="questionImageContainer" class="image-container hidden">
+                                        <img id="questionImage" src="" alt="Question Image">
+                                    </div>
+                                </div>
+                                <button id="showHintBtn" class="button secondary small hidden">Show Hint</button>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="card-content">
+                                    <p id="answerText"></p>
+                                    <div id="answerImageContainer" class="image-container hidden">
+                                        <img id="answerImage" src="" alt="Answer Image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="study-controls">
+                    <div class="navigation-controls">
+                        <button id="prevCardBtn" class="button secondary">&larr; Previous</button>
+                        <button id="flipCardBtn" class="button primary">Flip Card</button>
+                        <button id="nextCardBtn" class="button secondary">Next &rarr;</button>
+                    </div>
+                    <div class="rating-controls hidden" id="ratingControls">
+                        <button id="markEasyBtn" class="button rating easy">Easy</button>
+                        <button id="markDifficultBtn" class="button rating difficult">Difficult</button>
+                    </div>
+                    <div class="auto-controls">
+                        <button id="autoPlayBtn" class="button secondary">Auto Play</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="modalOverlay" class="modal-overlay hidden">
+            <div class="modal" id="modal">
+                <h3 id="modalTitle">Modal Title</h3>
+                <div id="modalContent"></div>
+                <div class="modal-buttons">
+                    <button id="modalCancelBtn" class="button secondary">Cancel</button>
+                    <button id="modalConfirmBtn" class="button primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="keyboardShortcuts" class="keyboard-shortcuts">
+        <div class="shortcut-item">
+            <kbd>Space</kbd> <span>Flip Card</span>
+        </div>
+        <div class="shortcut-item">
+            <kbd>&rarr;</kbd> <span>Next Card</span>
+        </div>
+        <div class="shortcut-item">
+            <kbd>&larr;</kbd> <span>Previous Card</span>
+        </div>
+        <div class="shortcut-item">
+            <kbd>E</kbd> <span>Mark Easy</span>
+        </div>
+        <div class="shortcut-item">
+            <kbd>D</kbd> <span>Mark Difficult</span>
+        </div>
+        <div class="shortcut-item">
+            <kbd>H</kbd> <span>Show Hint</span>
+        </div>
+    </div>
+
+    <script src="js/app.js" type="module"></script>
+</body>
+</html> 

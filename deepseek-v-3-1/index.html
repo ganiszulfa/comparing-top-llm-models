@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Flashcard App</h1>
+            <button id="toggle-theme">Toggle Dark Mode</button>
+        </header>
+        <main>
+            <div id="library-view">
+                <h2>Your Decks</h2>
+                <input type="file" id="csv-upload" accept=".csv">
+                <div id="decks-list"></div>
+            </div>
+            <div id="study-view" style="display: none;">
+                <div id="study-config"></div>
+                <div id="flashcard"></div>
+                <div id="study-controls"></div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 

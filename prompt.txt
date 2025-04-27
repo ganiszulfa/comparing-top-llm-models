@@ -1,0 +1,44 @@
+Create a responsive, browser-based flashcard application using JavaScript. You may use frameworks but the solution should run directly in the browser without requiring a build/compile step. The app should have an intuitive interface with clean design.
+
+Deck Management
+- Allow users to upload flashcard decks via CSV files with the following format:
+  - Required columns: `question`, `answer`
+  - Optional columns: `image_url`, `category`
+- Provide a library view that displays all uploaded decks with:
+  - Deck name (derived from CSV filename)
+  - Card count
+- Support local storage to persist decks between sessions
+- Allow users to delete or rename decks
+
+Study Interface
+- When a user selects a deck, provide study configuration options:
+  - Random/sequential card order toggle
+  - Number of cards to study (all or specific number)
+  - Time limit per card (optional)
+  - Category to choose (optional)
+- Implement a clean card flipping animation when revealing answers
+- Display progress (cards completed/total)
+- Include navigation controls (previous/next card/auto play)
+
+Study Features
+- Track statistics for each card (times viewed, correct/incorrect responses)
+- Allow users to mark cards as "easy" or "difficult" for targeted practice
+- Support keyboard shortcuts for common actions (flip card, mark correct/incorrect)
+- Include a hint system for difficult cards (optional)
+
+Visual Design
+- Use responsive design for mobile and desktop usage
+- Implement a light/dark mode toggle
+- Display images appropriately when available
+- Ensure adequate text contrast and readability for all cards
+
+Export/Import
+- Support merging of decks
+- Provide sample CSV templates for users to download
+
+Technical Requirements
+- Ensure the app functions without internet connection after initial load
+- Handle errors gracefully (invalid CSV format, missing data)
+- Implement responsive design for various screen sizes
+- Include proper accessibility features (keyboard navigation, screen reader support)
+- Add basic data validation for CSV imports

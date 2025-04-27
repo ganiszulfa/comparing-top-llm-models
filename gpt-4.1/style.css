@@ -1,0 +1,262 @@
+/* Root variables for light/dark mode */
+:root {
+  --bg: #f9f9f9;
+  --fg: #222;
+  --accent: #007bff;
+  --card-bg: #fff;
+  --card-fg: #222;
+  --border: #ddd;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --correct: #4caf50;
+  --incorrect: #e53935;
+  --easy: #c8e6c9;
+  --difficult: #ffcdd2;
+}
+[data-theme="dark"] {
+  --bg: #181a1b;
+  --fg: #f1f1f1;
+  --accent: #90caf9;
+  --card-bg: #23272a;
+  --card-fg: #f1f1f1;
+  --border: #333;
+  --shadow: 0 2px 8px rgba(0,0,0,0.32);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+header, footer {
+  background: var(--card-bg);
+  color: var(--fg);
+  box-shadow: var(--shadow);
+  padding: 1rem 2vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+#toggle-mode {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--accent);
+}
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2vw;
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+section {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem 1rem;
+  box-sizing: border-box;
+}
+#deck-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0 0;
+}
+#deck-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.25rem;
+  border-bottom: 1px solid var(--border);
+}
+#deck-list li:last-child {
+  border-bottom: none;
+}
+#deck-list button {
+  margin-left: 0.5rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+#deck-list button[aria-label*="delete"] {
+  background: var(--incorrect);
+}
+#deck-list button[aria-label*="rename"] {
+  background: var(--accent);
+}
+#csv-upload, #download-template {
+  margin-top: 0.5rem;
+}
+#study-options label {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+#study-options input, #study-options select {
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+}
+#study-options button {
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+}
+#progress {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+#card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 220px;
+  margin-bottom: 1rem;
+}
+.card {
+  width: 320px;
+  height: 200px;
+  perspective: 1000px;
+  margin-bottom: 0.5rem;
+  outline: none;
+}
+.card-face {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  background: var(--card-bg);
+  color: var(--card-fg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  transition: background 0.2s;
+}
+.card-front {
+  z-index: 2;
+}
+.card-back {
+  transform: rotateY(180deg);
+}
+.card {
+  position: relative;
+  transition: box-shadow 0.2s;
+  cursor: pointer;
+}
+.card.flipped .card-front {
+  transform: rotateY(180deg);
+}
+.card.flipped .card-back {
+  transform: rotateY(0deg);
+  z-index: 3;
+}
+.card.flipped {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+#card-image {
+  max-width: 300px;
+  max-height: 120px;
+  margin: 0.5rem auto 0 auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+#card-controls, #mark-controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+#card-controls button, #mark-controls button {
+  font-size: 1.2rem;
+  background: var(--card-bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+#mark-easy {
+  background: var(--easy);
+  color: var(--fg);
+}
+#mark-difficult {
+  background: var(--difficult);
+  color: var(--fg);
+}
+#mark-correct {
+  background: var(--correct);
+  color: #fff;
+}
+#mark-incorrect {
+  background: var(--incorrect);
+  color: #fff;
+}
+#show-hint {
+  background: var(--accent);
+  color: #fff;
+}
+#exit-study {
+  margin-top: 1rem;
+  background: var(--incorrect);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+#error-message {
+  background: var(--incorrect);
+  color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  main, section {
+    padding: 1vw;
+    max-width: 100vw;
+  }
+  .card {
+    width: 95vw;
+    min-width: 0;
+    max-width: 98vw;
+    height: 160px;
+  }
+  #card-image {
+    max-width: 90vw;
+    max-height: 80px;
+  }
+}
+:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+} 

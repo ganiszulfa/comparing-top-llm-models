@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Flashcard Study App</h1>
+        <div class="controls">
+            <label for="theme-toggle" class="theme-toggle-label">
+                <input type="checkbox" id="theme-toggle" aria-label="Toggle Dark Mode">
+                <span class="slider round"></span>
+                <span class="toggle-text">Dark Mode</span>
+            </label>
+        </div>
+    </header>
+
+    <main>
+        <section id="deck-management" class="active-section">
+            <h2>Deck Library</h2>
+            <div class="deck-actions">
+                <input type="file" id="csv-upload" accept=".csv" style="display: none;">
+                <button id="upload-button">Upload Deck (CSV)</button>
+                <a id="sample-csv-link" href="sample_deck.csv" download="sample_deck.csv">Download Sample CSV</a>
+                <button id="merge-button" disabled>Merge Selected Decks</button>
+            </div>
+            <div id="deck-list">
+                <!-- Deck items will be populated here -->
+            </div>
+            <div id="import-status"></div>
+        </section>
+
+        <section id="study-config" class="hidden-section">
+            <h2 id="config-deck-name">Configure Study Session</h2>
+            <form id="study-options-form">
+                <div class="form-group">
+                    <label for="study-order">Order:</label>
+                    <select id="study-order">
+                        <option value="sequential">Sequential</option>
+                        <option value="random" selected>Random</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="num-cards">Number of Cards:</label>
+                    <input type="number" id="num-cards" min="1" value="10">
+                    <button type="button" id="set-all-cards">All</button>
+                </div>
+                 <div class="form-group">
+                    <label for="study-category">Category:</label>
+                    <select id="study-category">
+                        <option value="all">All Categories</option>
+                        <!-- Categories will be populated here -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="time-limit">Time Limit per Card (seconds, 0 for none):</label>
+                    <input type="number" id="time-limit" min="0" value="0">
+                </div>
+                <button type="submit" id="start-study-button">Start Studying</button>
+                <button type="button" id="cancel-config-button">Cancel</button>
+            </form>
+        </section>
+
+        <section id="study-interface" class="hidden-section">
+            <h2 id="study-deck-name">Studying: Deck Name</h2>
+            <div id="study-progress">Card 1 / 10</div>
+            <div id="timer-display" style="display: none;">Time Left: <span>--</span>s</div>
+
+            <div id="flashcard-container">
+                <div id="flashcard">
+                    <div class="card-face card-front">
+                        <p id="card-question"></p>
+                        <img id="card-image" src="" alt="Card image" style="display: none;"/>
+                    </div>
+                    <div class="card-face card-back">
+                        <p id="card-answer"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hint-area" style="display: none;">
+                 <button id="show-hint-button">Show Hint</button>
+                 <p id="hint-text" style="display: none;"></p>
+            </div>
+
+            <div class="study-controls">
+                 <button id="prev-card" title="Previous Card (P or Left Arrow)">Previous</button>
+                 <button id="flip-card" title="Flip Card (F or Space)">Flip</button>
+                 <button id="next-card" title="Next Card (N or Right Arrow)">Next</button>
+            </div>
+             <div class="feedback-controls">
+                <button id="mark-correct" title="Mark Correct (C)">Correct</button>
+                <button id="mark-incorrect" title="Mark Incorrect (I)">Incorrect</button>
+                <button id="mark-easy" title="Mark Easy (E)">Easy</button>
+                <button id="mark-difficult" title="Mark Difficult (D)">Difficult</button>
+            </div>
+            <div class="session-controls">
+                <button id="toggle-autoplay" title="Toggle Autoplay (A)">Autoplay</button>
+                 <button id="finish-session">Finish Study Session</button>
+            </div>
+        </section>
+
+        <section id="study-results" class="hidden-section">
+            <h2>Study Results</h2>
+            <div id="results-summary"></div>
+            <div id="results-details">
+                 <h3>Card Details:</h3>
+                 <ul id="card-results-list"></ul>
+            </div>
+            <button id="return-to-library">Return to Deck Library</button>
+            <button id="restart-study">Study Same Deck Again</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>Flashcard App - Simple browser-based learning</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
